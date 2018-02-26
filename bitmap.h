@@ -3,6 +3,10 @@
 #define	BITMAP_MASK 1
 typedef _Bool bool;
 
+enum {
+	false = 0,
+	true = 1
+};
 struct bitmap{
 
 	unsigned int bitmap_bytes_len;
