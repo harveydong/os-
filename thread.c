@@ -45,6 +45,36 @@ void schedule()
 }
 
 
+void thread_block(enum task_status stat)
+{
+	ASSERT(((stat == TASK_BLOCKED || stat == TASK_WAITING || stat == TASK_HANGING)));
+	
+	enum intr_status old_status = intr_disable();
+	struct task_struct *pthread = running_thread();
+	
+	pthread->status = stat;
+	schedule();
+
+	intr_set_status(old_status);
+}
+
+
+void thread_unblock(struct task_struct *pthread)
+{
+	enum intr_status old_status = intr_disable();
+	ASSERT(((pthread->status == TASK_BLOCKED || pthread->status == TASK_WAITING || pthread->status == TASK_HANGING)));
+	if(pthread->status != TASK_READY){
+		ASSERT(!elem_find(&thread_ready_list,&pthread->general_tag));
+		if(elem_find(&thread_ready_list,&pthread->general_tag)){
+			put_str("thread unblock: blocked thread in ready_list\n");
+		}
+
+		list_push(&thread_ready_list,&pthread->general_tag);
+		pthread->status = TASK_READY;
+	}
+
+	intr_set_status(old_status);
+}
 
 static void kernel_thread(thread_func *function,void * func_arg)
 {

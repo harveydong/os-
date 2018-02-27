@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "thread.h"
 #include "interrupt.h"
+#include "console.h"
 void k_thread_a(void*);
 void k_thread_b(void*);
 
@@ -25,16 +26,14 @@ int main(void)
 //	put_str("\n");
 //	ASSERT(1==2);
 
-	thread_start("k_thread_a",10,k_thread_a,"arga ");		
-	thread_start("k_thread_b",5,k_thread_b,"argb ");	
+//	thread_start("k_thread_a",10,k_thread_a,"argA ");		
+//	thread_start("k_thread_b",5,k_thread_b,"argB ");	
 //	put_str("ok main 1 \n");
 	intr_enable();	
 	put_str("ok here main\n");
 	while(1)
 	{
-		intr_disable();
-		put_str("main ");
-		intr_enable();
+		//console_put_str("Mainh ");
 	}
 	return 0;
 }
@@ -45,10 +44,7 @@ void k_thread_a(void *arg)
 	char *para = arg;
 	
 	while(1){
-		intr_disable();
-		put_str(para);
-		intr_enable();
-		
+		console_put_str(arg);	
 	}
 }
 
@@ -59,9 +55,7 @@ void k_thread_b(void *arg)
 	char *para = arg;
 	
 	while(1){
-		intr_disable();
-		put_str(para);
-		intr_enable();
+		console_put_str(arg);	
 		
 	}
 }

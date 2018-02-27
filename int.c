@@ -3,7 +3,7 @@
 #include "interrupt.h"
 
 
-#define	IDT_DESC_CNT 0x21
+#define	IDT_DESC_CNT 0x30
 #define	EFLAGS_IF 0x00000200
 #define	GET_EFLAGS(EFLAG_VAR) asm volatile("pushfl; popl %0":"=g"(EFLAG_VAR))
 
@@ -173,7 +173,7 @@ static void pic_init(void)
 	outb(0xa1,0x01);
 
 
-	outb(0x21,0xfe);
+	outb(0x21,0xfd);
 	outb(0xa1,0xff);
 
 }
